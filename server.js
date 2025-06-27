@@ -44,9 +44,6 @@ async function saveDataToDatabase() {
       await prisma.sensorsData.create({
         data: { temperature: tempSensorData, soilMoisture: soilMoistureData, waterLevel: waterLevelData }
       });
-      tempSensorData = '';
-      soilMoistureData = '';
-      waterLevelData = '';
       console.log('Data saved to database');
     // }
     // else {
@@ -81,14 +78,17 @@ client.on('message', async (topic, message) => {
   console.log(`Message received on topic ${topic}: ${message.toString()}`);
 
   if (topic === TEMP_SENSOR_TOPIC) {
+    tempSensorData = message.toString();
     saveDataToDatabase();
   }
 
   if (topic === SOIL_MOISTURE_TOPIC) {
+    soilMoistureData = message.toString();
     saveDataToDatabase();
   }
 
   if (topic === WATER_LEVEL_TOPIC) {
+    waterLevelData = message.toString();
     saveDataToDatabase();
   }
 });
