@@ -1,1 +1,1 @@
-web: npm run buid && npm run start
+web: node server.js
