@@ -32,10 +32,12 @@ const client = mqtt.connect(mqttUri, {
 const TEMP_SENSOR_TOPIC = 'tempSensorData';
 const SOIL_MOISTURE_TOPIC = 'soilMoistureData';
 const WATER_LEVEL_TOPIC = 'waterLevelData';
+const ESP_CONNECTED_TOPIC = 'espConnected';
 
 let tempSensorData = '';
 let soilMoistureData = '';
 let waterLevelData = '';
+let espConnected = 'false';
 
 async function saveDataToDatabase() {
   try {
@@ -56,6 +58,15 @@ async function saveDataToDatabase() {
   } catch (error) {
     console.error('Error saving data to database:', error);
   }
+}
+
+async function getLimit() {
+  const limit = await prisma.limit.findUnique({
+    where: {
+      id: 1
+    }
+  });
+  return limit;
 }
 
 // Connect to MQTT broker
@@ -93,6 +104,16 @@ client.on('message', async (topic, message) => {
   if (topic === WATER_LEVEL_TOPIC) {
     waterLevelData = message.toString();
     saveDataToDatabase();
+  }
+
+  if (topic === ESP_CONNECTED_TOPIC) {
+    espConnected = message.toString();
+    if (espConnected === 'true') {
+      const limit = await getLimit();
+      client.publish('soilMoistureUpperLimit', limit.soilMoistureUpperLimit.toString());
+      client.publish('soilMoistureLowerLimit', limit.soilMoistureLowerLimit.toString());
+      client.publish('waterLevelLimit', limit.waterLevelLimit.toString());
+    }
   }
 });
 
