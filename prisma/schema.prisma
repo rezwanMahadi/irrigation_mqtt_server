@@ -20,4 +20,13 @@ model sensorsData {
   soilMoisture String
   waterLevel   String
   timestamp    DateTime @default(now())
+
+  @@index([timestamp])
+}
+
+model limit {
+  id Int @id @default(autoincrement())
+  soilMoistureUpperLimit Int
+  soilMoistureLowerLimit Int
+  waterLevelLimit Int
 }
