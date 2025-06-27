@@ -1,1 +1,1 @@
-web: npx prisma generate --no-engine && npm start
+web: npm run build && npm start
