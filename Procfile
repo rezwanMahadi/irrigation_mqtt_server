@@ -1,1 +1,1 @@
-web: npx prisma generate --no-engine && node server.js
+web: npx prisma generate --no-engine && npm start
