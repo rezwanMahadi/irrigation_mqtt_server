@@ -85,6 +85,10 @@ client.on('connect', () => {
   client.subscribe(WATER_LEVEL_TOPIC, (err) => {
     if (!err) console.log(`Subscribed to ${WATER_LEVEL_TOPIC}`);
   });
+
+  client.subscribe(ESP_CONNECTED_TOPIC, (err) => {
+    if (!err) console.log(`Subscribed to ${ESP_CONNECTED_TOPIC}`);
+  });
 });
 
 // Handle MQTT messages
