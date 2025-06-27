@@ -38,19 +38,23 @@ let soilMoistureData = '';
 let waterLevelData = '';
 
 async function saveDataToDatabase() {
-  if (tempSensorData || soilMoistureData || waterLevelData) {
-    console.log('Saving data to database');
-    await prisma.sensorsData.create({
-      data: { temperature: tempSensorData, soilMoisture: soilMoistureData, waterLevel: waterLevelData }
-    });
-    tempSensorData = '';
-    soilMoistureData = '';
-    waterLevelData = '';
-    console.log('Data saved to database');
-  }
-  else {
-    console.log('Data not saved to database');
-    return;
+  try {
+    // if (tempSensorData || soilMoistureData || waterLevelData) {
+      console.log('Saving data to database');
+      await prisma.sensorsData.create({
+        data: { temperature: tempSensorData, soilMoisture: soilMoistureData, waterLevel: waterLevelData }
+      });
+      tempSensorData = '';
+      soilMoistureData = '';
+      waterLevelData = '';
+      console.log('Data saved to database');
+    // }
+    // else {
+    //   console.log('Data not saved to database');
+    //   return;
+    // }
+  } catch (error) {
+    console.error('Error saving data to database:', error);
   }
 }
 
@@ -62,11 +66,11 @@ client.on('connect', () => {
   client.subscribe(TEMP_SENSOR_TOPIC, (err) => {
     if (!err) console.log(`Subscribed to ${TEMP_SENSOR_TOPIC}`);
   });
-  
+
   client.subscribe(SOIL_MOISTURE_TOPIC, (err) => {
     if (!err) console.log(`Subscribed to ${SOIL_MOISTURE_TOPIC}`);
   });
-  
+
   client.subscribe(WATER_LEVEL_TOPIC, (err) => {
     if (!err) console.log(`Subscribed to ${WATER_LEVEL_TOPIC}`);
   });
@@ -75,15 +79,15 @@ client.on('connect', () => {
 // Handle MQTT messages
 client.on('message', async (topic, message) => {
   console.log(`Message received on topic ${topic}: ${message.toString()}`);
-  
+
   if (topic === TEMP_SENSOR_TOPIC) {
     saveDataToDatabase();
   }
-  
+
   if (topic === SOIL_MOISTURE_TOPIC) {
     saveDataToDatabase();
   }
-  
+
   if (topic === WATER_LEVEL_TOPIC) {
     saveDataToDatabase();
   }
@@ -122,7 +126,7 @@ app.get('/api/sensor-data', async (req, res) => {
         orderBy: { timestamp: 'desc' }
       })
     ]);
-    
+
     res.json({
       temperature: latestTemp,
       soilMoisture: latestMoisture,
