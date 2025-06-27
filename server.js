@@ -18,6 +18,9 @@ const clientId = 'server_side'
 const username = 'server_side'
 const password = 'server_side'
 
+// LED state
+let ledState = { status: false };
+
 // MQTT setup
 const client = mqtt.connect(mqttUri, {
   clientId,
@@ -33,6 +36,7 @@ const TEMP_SENSOR_TOPIC = 'tempSensorData';
 const SOIL_MOISTURE_TOPIC = 'soilMoistureData';
 const WATER_LEVEL_TOPIC = 'waterLevelData';
 const ESP_CONNECTED_TOPIC = 'espConnected';
+const HEARTBEAT_TOPIC = 'heartbeat';
 
 let tempSensorData = '';
 let soilMoistureData = '';
@@ -89,7 +93,18 @@ client.on('connect', () => {
   client.subscribe(ESP_CONNECTED_TOPIC, (err) => {
     if (!err) console.log(`Subscribed to ${ESP_CONNECTED_TOPIC}`);
   });
+
+  // Start sending heartbeat
+  startHeartbeat();
 });
+
+// Send heartbeat message at regular intervals
+function startHeartbeat() {
+  setInterval(() => {
+    client.publish(HEARTBEAT_TOPIC, 'serverAlive');
+    console.log('Heartbeat sent');
+  }, 5000); // Send heartbeat every 5 seconds
+}
 
 // Handle MQTT messages
 client.on('message', async (topic, message) => {
