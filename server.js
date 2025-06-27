@@ -38,7 +38,7 @@ let soilMoistureData = '';
 let waterLevelData = '';
 
 async function saveDataToDatabase() {
-  if (tempSensorData && soilMoistureData && waterLevelData) {
+  if (tempSensorData || soilMoistureData || waterLevelData) {
     console.log('Saving data to database');
     await prisma.sensorsData.create({
       data: { temperature: tempSensorData, soilMoisture: soilMoistureData, waterLevel: waterLevelData }
