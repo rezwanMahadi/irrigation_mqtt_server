@@ -1,1 +1,1 @@
-web: npm start 
+web: npm run buid && npm run start

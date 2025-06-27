@@ -13,10 +13,12 @@
   "license": "ISC",
   "description": "ESP32 LED control server",
   "dependencies": {
+    "@prisma/client": "^6.10.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mqtt": "^5.13.1",
     "nodemon": "^3.0.1",
+    "prisma": "^6.10.1",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
