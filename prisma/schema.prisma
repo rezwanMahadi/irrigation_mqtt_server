@@ -16,8 +16,8 @@ datasource db {
 
 model sensorsData {
   id           Int      @id @default(autoincrement())
-  temperature  Float
-  soilMoisture Int
-  waterLevel   Int
+  temperature  String
+  soilMoisture String
+  waterLevel   String
   timestamp    DateTime @default(now())
 }

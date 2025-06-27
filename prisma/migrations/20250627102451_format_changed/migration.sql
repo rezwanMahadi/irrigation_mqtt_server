@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "sensorsData" ALTER COLUMN "temperature" SET DATA TYPE TEXT,
+ALTER COLUMN "soilMoisture" SET DATA TYPE TEXT,
+ALTER COLUMN "waterLevel" SET DATA TYPE TEXT;
